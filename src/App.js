@@ -5,27 +5,29 @@ import { Profile } from './Pages/Profile'
 import { Contact } from './Pages/Contact'
 import { Error } from './Pages/Error'
 import { Nav } from './Nav';
-import { useState, createContext } from 'react';
-
-export const AppContext = createContext();
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 function App() {
-  const [username, setUsername] = useState("Victor Timi")
-
+  const client = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false
+      }
+    }
+  })
 
   return (
     <div className="App">
-      <AppContext.Provider value={{username, setUsername}}>
+      <QueryClientProvider client={client}>
         <Router>
           <Nav />
           <Routes>
-            <Route path='/' element={<Home username={username}/>} />
-            <Route path='/Profile' element={<Profile username={username} setUsername={setUsername}/>} />
+            <Route path='/' element={<Home />} />
+            <Route path='/Profile' element={<Profile  />} />
             <Route path='/Contact' element={<Contact />} />
             <Route path='*' element={<Error />} />
           </Routes>
         </Router>
-      </AppContext.Provider>
+      </QueryClientProvider>
     </div>
   );
 }
